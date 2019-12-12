@@ -1,7 +1,8 @@
 #include <SoftwareSerial.h>
 #include <Wire.h>
 
-int extern r1, l1;
+int extern r1, l1, r2, l2, m;
+const float max_err_deg = 10.0; // 與目標方向差多少度 45+-5
 
 void fiveBlack_adjest() // 校正成與方格切齊
 {
@@ -21,7 +22,19 @@ void fiveBlack_adjest() // 校正成與方格切齊
 
 bool checkline()
 {
-    return true;
+    // read sensor value
+    r1 = digitalRead(R1); // right-outer sensor
+    r2 = digitalRead(R2); // right-inner sensor
+    m  = digitalRead(M);  // middle sensor
+    l2 = digitalRead(L2); // left-inner sensor
+    l1 = digitalRead(L1); // left-outer sensor
+    if(r1 == 1 || r2 == 1 || m == 1 || l2 == 1 || l1 == 1)
+    {
+        Serial.println("Have line");
+        return true;
+    }
+    Serial.println("No line");
+    return false;
 }
 
 void forward()
@@ -41,87 +54,63 @@ void forward()
 
 void left_turn()
 {
-    MotorWriting(150,-150); // 先轉一段
-    delay(200);
-    // 看MPU9255的角度修正 TODO
+    // forward()?
+    // 先直走一段
+    MotorWriting(150,150);
+    delay(500);
+    // 計算目標角度 = 現在角度-90
+    int target_phi = get_phi() - 90;
+    // 處理超過0~360的值
+    if(target_phi < 0)
+      target_phi += 360;
+    // 當與目標差 <= max_err_deg時停止
+    while(abs(get_phi()- target_phi) > max_err_deg)
+    {
+      MotorWriting(40,-40);
+      Serial.print("Phi:");
+      Serial.println(get_phi());
+    }
     MotorWriting(0,0);
 }
 
 void right_turn()
 {
-    MotorWriting(-150,150); // 先轉一段
-    delay(200);
-    // 看MPU9255的角度修正 TODO
+    // forward()?
+    // 先直走一段
+    MotorWriting(150,150);
+    delay(500);
+    // 計算目標角度 = 現在角度+90
+    int target_phi = get_phi() + 90;
+    // 處理超過0~360的值
+    if(target_phi > 360)
+      target_phi -= 360;
+    // 當與目標差 <= max_err_deg時停止
+    while(abs(get_phi()- target_phi) > max_err_deg)
+    {
+      MotorWriting(-40,40);
+      Serial.print("Phi:");
+      Serial.println(get_phi());
+    }
     MotorWriting(0,0);
 }
 
 void U_turn()
 {
-    MotorWriting(150,-150); // 先轉一段
-    delay(400);
-    // 看MPU9255的角度修正 TODO
+    // forward()?
+    // 先直走一段
+    MotorWriting(150,150);
+    delay(500);
+    // 計算目標角度 = 現在角度-180(左轉)
+    int target_phi = get_phi() - 180;
+    // 處理超過0~360的值
+    if(target_phi < 0)
+      target_phi += 360;
+    // 當與目標差 <= max_err_deg時停止(左轉)
+    while(abs(get_phi()- target_phi) > max_err_deg)
+    {
+      MotorWriting(40,-40);
+      Serial.print("Phi:");
+      Serial.println(get_phi());
+    }
     MotorWriting(0,0);
 }
-/*
-void node(int dir){
-    switch(dir){
-        case 0:
-            MotorWriting(200,150);
-            delay(250);
-            MotorWriting(0,0);
-            //tracking(r2,r1,m,l1,l2);break;
-        
-        case 1: //turn right
-            MotorWriting(-200,200);//轉彎(小)
-            delay(140);
-             MotorWriting(0,0);
-            // Serial.print("2nd");
-           // delay(2000);
-            //Serial.print(digitalRead(R1));
-            //轉到偵測到黑
-            while(digitalRead(L1) ==0){
-              Serial.print("white");
-              MotorWriting(-80,80);
-            }
-           
-            MotorWriting(0,0);
-            //Serial.print("3rd");
-            //delay(2000);
-            MotorWriting(100,100);//直走小(可嘗試刪掉)
-            delay(100);break;
-            
-            
-        
-        case 2: //turn left
-            MotorWriting(200,-200);
-            delay(140);
-            MotorWriting(0,0);
-            //delay(2000);
-            
-            while(digitalRead(R1)==0){
-              MotorWriting(100,-100);
-            }
-            
-            MotorWriting(0,0);
-            //delay(2000);
-            MotorWriting(100,100);
-            delay(100);break;
-            
-        case 3: //180
-            MotorWriting(-255,255);
-            delay(400);
-             MotorWriting(0,0);
-            //delay(2000);
-            while(digitalRead(L1)==0){
-              MotorWriting(-100,100);
-            }
-             MotorWriting(0,0);
-            //delay(2000);
-           break;
-            
-        case 4://halt
-            MotorWriting(0,0);
-            delay(100);break;
-    }
-}
-*/

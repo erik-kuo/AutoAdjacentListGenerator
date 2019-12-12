@@ -64,9 +64,9 @@ void setup()
 
 //Self define header
 #include "track.h"
+#include "bluetooth.h"
 #include "node.h"
 #include "compass.h"
-#include "bluetooth.h"
 
 
 // head direction

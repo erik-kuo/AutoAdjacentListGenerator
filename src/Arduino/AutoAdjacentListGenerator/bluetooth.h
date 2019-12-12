@@ -1,3 +1,4 @@
+
 #include<SoftwareSerial.h>
 
 enum BT_CMD {
@@ -27,7 +28,11 @@ int ask_BT(){
     return message;
 }
 
-void send_BT(){} // TODO
+void send_BT(const char& msg)
+{
+     // TODO
+     BT.write(msg);
+}
 /*
 char convert_to_hex(int x)
 {
