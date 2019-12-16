@@ -1,7 +1,5 @@
-
 #include<SoftwareSerial.h>
-#ifndef BT_H
-#define BT_H
+
 enum BT_CMD {
   NOTHING,
   HAULT,
@@ -33,7 +31,6 @@ void send_BT(const char& msg)
      // TODO
      BT.write(msg);
 }
-#endif
 /*
 char convert_to_hex(int x)
 {
