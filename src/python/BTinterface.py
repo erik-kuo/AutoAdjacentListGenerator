@@ -6,40 +6,48 @@ class interface:
         print("")
         print("Arduino Bluetooth Connect Program.")
         print("")
-        self.ser = BT.bluetooth()
         port = input("PC bluetooth port name: ")
+        self.ser = BT.bluetooth(port)
         while(not self.ser.do_connect(port)):
             if(port == "quit"):
                 self.ser.disconnect()
                 quit()
             port = input("PC bluetooth port name: ")
-        input("Press enter to start.")
-        self.ser.SerialWrite('s')
+        
+    def Arduino_Search(self):
+        input("Press enter to start SERACH().")
+        self.ser.write('S')
 
-    def wait_for_Arduino(self):
-        return self.ser.SerialReadByte()
+    def Arduino_Adjust_Compass(self):
+        input("Press enter to start COMPASS().")
+        self.ser.write('A')    
 
-    def send_action(self,dirc):
-        #if(dirc == maze.Action.ADVANCE):
+    def Arduino_Hault(self):
+        input("Press enter to start HAULT().")
+        self.ser.write('H')
+
+    def get_Arduino_msg(self):
+        return self.ser.readString()
+
+    def send_dir(self,dirc):
+        #PY
         if(dirc==1):
-            self.ser.SerialWrite('f')
-                #elif(dirc == maze.Action.U_TURN):
+            self.ser.write('n')
+        #PX
         elif(dirc==2):
-            self.ser.SerialWrite('b')
-                #elif(dirc == maze.Action.TURN_RIGHT):
+            self.ser.write('e')
+        #NX
         elif(dirc==3):
-            self.ser.SerialWrite('r')
-                #elif(dirc == maze.Action.TURN_LEFT):
+            self.ser.write('w')
+        #NY
         elif(dirc==4):
-            self.ser.SerialWrite('l')
-                #elif(dirc == maze.Action.HALT):
-        elif(dirc==5):
-            self.ser.SerialWrite('h')
+            self.ser.write('s')
+        #error
         else:
             print ('Error: An invalid input for action.')
 
     def end_process(self):
-        self.ser.SerialWrite('e')
+        self.ser.write('H')
         self.ser.disconnect()
 
 '''

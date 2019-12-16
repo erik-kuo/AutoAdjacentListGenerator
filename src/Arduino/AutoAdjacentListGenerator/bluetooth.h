@@ -1,11 +1,12 @@
 
 #include<SoftwareSerial.h>
-
+#ifndef BT_H
+#define BT_H
 enum BT_CMD {
   NOTHING,
   HAULT,
   SEARCH,
-  ADJUSMENT,
+  ADJUSTMENT,
   BT_PX,
   BT_PY,
   BT_NX,
@@ -19,6 +20,10 @@ BT_CMD ask_BT(){
     if(cmd=='H')message=HAULT;
     if(cmd=='S')message=SEARCH;
     if(cmd=='A')message=ADJUSTMENT;
+    if(cmd=='n')message=BT_PY;
+    if(cmd=='e')message=BT_PX;
+    if(cmd=='w')message=BT_NX;
+    if(cmd=='s')message=BT_NY;
     }
     return message;
 }
@@ -28,6 +33,7 @@ void send_BT(const char& msg)
      // TODO
      BT.write(msg);
 }
+#endif
 /*
 char convert_to_hex(int x)
 {

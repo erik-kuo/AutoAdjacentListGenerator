@@ -31,9 +31,11 @@ bool checkline()
     if(r1 == 1 || r2 == 1 || m == 1 || l2 == 1 || l1 == 1)
     {
         Serial.println("Have line");
+        send_BT('L');
         return true;
     }
     Serial.println("No line");
+    send_BT('N');
     return false;
 }
 
