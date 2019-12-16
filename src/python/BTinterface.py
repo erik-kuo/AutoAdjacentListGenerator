@@ -41,16 +41,16 @@ class interface:
 	# sending dirction 
 	def send_dir(self,dirc):
 		#PY
-		if(dirc==1):
+		if(dirc=="PY"):
 			self.ser.write('n')
 		#PX
-		elif(dirc==2):
+		elif(dirc=="PX"):
 			self.ser.write('e')
 		#NX
-		elif(dirc==3):
+		elif(dirc=="NX"):
 			self.ser.write('w')
 		#NY
-		elif(dirc==4):
+		elif(dirc=="NY"):
 			self.ser.write('s')
 		#error
 		else:
