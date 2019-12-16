@@ -1,3 +1,10 @@
+#########################################################################################################################################
+## File 		[BT.py]
+## Author 		[Erik Kuo]
+## Synopsis 	[basic bluetooth utility]
+## Modify 		[2019/12/16 Erik Kuo]
+#########################################################################################################################################
+
 import threading
 import time
 import sys
@@ -43,7 +50,8 @@ class bluetooth:
 			receiveMsg = self.ser.readline().decode("utf-8")[:-1]
 
 		return receiveMsg
-
+# function for testing utility
+'''
 def read():
 	while True:
 		if bt.waiting():
@@ -56,7 +64,7 @@ def write():
 		if msgWrite == "exit": sys.exit()
 	
 		bt.write(msgWrite + "\n")
-
+'''
 if __name__ == "__main__":
 	# Please modify the port name.
 	port = input("BT COM port :")

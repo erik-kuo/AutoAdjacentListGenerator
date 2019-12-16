@@ -1,11 +1,18 @@
+#########################################################################################################################################
+## File         [BTinterface.py]
+## Author       [Erik Kuo]
+## Synopsis     [bluetooth interface with Arduino]
+## Modify       [2019/12/16 Erik Kuo]
+#########################################################################################################################################
+
 import BT
-import maze
 
 class interface:
     def __init__(self):
         print("")
         print("Arduino Bluetooth Connect Program.")
         print("")
+        # input the COM port from keyboard
         port = input("PC bluetooth port name: ")
         self.ser = BT.bluetooth(port)
         while(not self.ser.do_connect(port)):
@@ -13,7 +20,8 @@ class interface:
                 self.ser.disconnect()
                 quit()
             port = input("PC bluetooth port name: ")
-        
+    
+    # sending change state cmd    
     def Arduino_Search(self):
         input("Press enter to start SERACH().")
         self.ser.write('S')
@@ -26,9 +34,11 @@ class interface:
         input("Press enter to start HAULT().")
         self.ser.write('H')
 
+    # get msg from Arduino::checkLine()
     def get_Arduino_msg(self):
         return self.ser.readString()
 
+    # sending dirction 
     def send_dir(self,dirc):
         #PY
         if(dirc==1):
@@ -46,24 +56,7 @@ class interface:
         else:
             print ('Error: An invalid input for action.')
 
+    # end process and let Arduino stay Hault
     def end_process(self):
         self.ser.write('H')
         self.ser.disconnect()
-
-'''
-if __name__ == "__main__":
-    # Please modify the port name.
-    arduino = interface()
-    bt = BT.bluetooth("COM4")
-    while not bt.is_open(): pass
-    print("BT Connected!")
-
-    readThread = threading.Thread(target=read)
-    readThread.setDaemon(True)
-    readThread.start()
-
-    while True:
-        msgWrite = input()
-        if msgWrite == "exit": sys.exit()
-        bt.write(msgWrite)
-'''
