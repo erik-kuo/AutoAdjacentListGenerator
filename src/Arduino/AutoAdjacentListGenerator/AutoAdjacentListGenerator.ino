@@ -1,6 +1,5 @@
 #include<SoftwareSerial.h> // for BlueTooth
 #include <MPU9255.h> //include MPU9255 library
-#include <SPI.h>
 //BlueTooth
 SoftwareSerial BT(8,7);   //bluetooth RX,TX
 //compass
@@ -12,6 +11,7 @@ MPU9255 mpu;
 #define MotorR_I4     10 //定義 I4 接腳（右）
 #define MotorL_PWML   3  //定義 ENA (PWM調速) 接腳
 #define MotorR_PWMR   5  //定義 ENB (PWM調速) 接腳
+
 // 循線模組
 #define L1  A0  // Define Left Most Sensor Pin
 #define L2  A1  // Define Left Middle Sensor Pin
@@ -33,7 +33,6 @@ void Search_Mode();
 void Hault_Mode();
 void SetState();
 // initalize parameter
-int _cmd=0;
 int r2=0,r1=0,m=0,l1=0,l2=0;
 int _Tp=80;
 double _rl_ratio = 1.33; // to match the motor on straight line
@@ -65,8 +64,8 @@ void setup()
 //Self define header
 #include "track.h"
 #include "bluetooth.h"
-#include "node.h"
 #include "compass.h"
+#include "node.h"
 
 
 // head direction
@@ -79,13 +78,16 @@ enum Direction {
 
 Direction _dir = PY;
 
+// BT command
+BT_CMD _cmd=NOTHING;
+
 void loop()
 {
    // search graph
    if(_state == SEARCH_STATE) Search_Mode();
    // wait for start cmd
    else if(_state == HAULT_STATE) Hault_Mode();
-   // adjest compass
+   // adjust compass
    else if(_state == COMPASS_STATE) Compass_Mode();
    SetState(); 
 }
