@@ -1,8 +1,8 @@
 #########################################################################################################################################
-## File 		[BT.py]
-## Author 		[Erik Kuo]
-## Synopsis 	[basic bluetooth utility]
-## Modify 		[2019/12/16 Erik Kuo]
+## File			[BT.py]
+## Author		[Erik Kuo]
+## Synopsis		[basic bluetooth utility]
+## Modify		[2019/12/16 Erik Kuo]
 #########################################################################################################################################
 
 import threading
@@ -42,7 +42,7 @@ class bluetooth:
 		# Write the byte to the output buffer, encoded by utf-8.
 		send = output.encode("utf-8")
 		self.ser.write(send)
-        self.ser.reset_output_buffer()
+		self.ser.reset_output_buffer()
 
 	def readString(self) -> str:
 		# Scan the input buffer until meet a '\n'. return none if doesn't exist.
