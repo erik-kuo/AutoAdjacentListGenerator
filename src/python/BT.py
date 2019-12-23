@@ -46,12 +46,13 @@ class bluetooth:
 
 	def readString(self) -> str:
 		# Scan the input buffer until meet a '\n'. return none if doesn't exist.
+		receiveMsg = ""
 		if(self.waiting()):
-			receiveMsg = self.ser.readline().decode("utf-8")[:-1]
+			receiveMsg = self.ser.readline().decode("utf-8")#[:-1]
 
 		return receiveMsg
 # function for testing utility
-'''
+
 def read():
 	while True:
 		if bt.waiting():
@@ -64,7 +65,7 @@ def write():
 		if msgWrite == "exit": sys.exit()
 	
 		bt.write(msgWrite + "\n")
-'''
+
 if __name__ == "__main__":
 	# Please modify the port name.
 	port = input("BT COM port :")
@@ -77,6 +78,4 @@ if __name__ == "__main__":
 	readThread.start()
 
 	while True:
-		msgWrite = input()
-		if msgWrite == "exit": sys.exit()
-		bt.write(msgWrite)
+		read()

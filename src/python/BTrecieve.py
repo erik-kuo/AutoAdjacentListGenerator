@@ -1,5 +1,5 @@
-import student
+import BTinterface
 
-arduino= student.interface()
+arduino= BTinterface.interface()
 while True:
-	print('get',arduino.wait_for_node())
+	print('get',arduino.get_Arduino_msg())
