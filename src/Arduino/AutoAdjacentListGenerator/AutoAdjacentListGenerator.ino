@@ -111,11 +111,7 @@ void SetState() {
       else _state=_state;
   }
   else if(_state==COMPASS_STATE){
-      if(_cmd==4)
         _state=HAULT_STATE;
-      if(_cmd==5)
-        _state=SEARCH_STATE;
-      else _state=_state;
   }
 }
 

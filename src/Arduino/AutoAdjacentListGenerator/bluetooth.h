@@ -1,36 +1,34 @@
+
 #include<SoftwareSerial.h>
 
 enum BT_CMD {
   NOTHING,
-  HAULT,
+  HAUT,
   SEARCH,
-  ADJUSTMENT,
   BT_PX,
   BT_PY,
   BT_NX,
   BT_NY,
 };
 
-BT_CMD ask_BT(){
+int ask_BT(){
     BT_CMD message=NOTHING;
     char cmd;
     if(BT.available()){cmd=BT.read();
-    if(cmd=='H')message=HAULT;
-    if(cmd=='S')message=SEARCH;
-    if(cmd=='A')message=ADJUSTMENT;
-    if(cmd=='n')message=BT_PY;
-    if(cmd=='e')message=BT_PX;
-    if(cmd=='w')message=BT_NX;
-    if(cmd=='s')message=BT_NY;
+    /*
+    if(cmd=='f')message=0;
+    if(cmd=='b')message=3;
+    if(cmd=='r')message=1;
+    if(cmd=='l')message=2;
+    if(cmd=='h')message=4;
+    if(cmd=='s')message=5;
+    if(cmd=='e')message=6;
+    */
     }
     return message;
 }
 
-void send_BT(const char& msg)
-{
-     // TODO
-     BT.write(msg);
-}
+void send_BT(){} // TODO
 /*
 char convert_to_hex(int x)
 {
