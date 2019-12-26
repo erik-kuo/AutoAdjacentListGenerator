@@ -6,13 +6,14 @@ class Node():
 	## dirc 	: a string, 	represent which direction the car entered the node. (dirc == None for starting node.)
 	## explore 	: a dictionary,	represent which direction the car has explored.
 
-	def __init__(self, coord = None, dirc = "PX"):
-		if last_coord == None:
+	def __init__(self, coord = None, dirc = "PX", idx = 0):
+		if coord == None:
 			self.init_start()
 		else:
 			self.coord = coord
 			self.dirc = dirc
 			self.init_explore()
+		self.idx = idx
 
 	def init_start(self):
 		self.coord = (0, 0)
@@ -41,36 +42,45 @@ class Node():
 	def get_dirc(self):
 		return self.dirc
 
+	def get_idx(self):
+		return self.idx
+
 class Graph():
 	def __init__(self):
 		self.car_coord = (0,0)
 		self.car_dir = "PX"
 		self.NodeList = {(0,0): Node()}
+		self.idx_count = 1
+		## self.Adj = 
 
-	def add_nextNode(self):
-		## add a node to the graph.
+	def get_next(self, dirc):
 		new_coord = list(self.car_coord)
-		if self.car_dir == "PX":
+		if dirc == "PX":
 			new_coord[0] += 1
 			new_dirc = "NX"
-		elif self.car_dir == "PY":
+		elif dirc == "PY":
 			new_coord[1] += 1
 			new_dirc = "NY"
-		elif self.car_dir == "NX":
+		elif dirc == "NX":
 			new_coord[0] -= 1
 			new_dirc = "PX"
-		elif self.car_dir == "NY":
+		elif dirc == "NY":
 			new_coord[1] -= 1
 			new_dirc = "PY"
+		else:
 			return False
-
 		new_coord = tuple(new_coord)
+		return new_coord, new_dirc
 
-		if new_coord in self.NodeList:
-			print("ERROR: Node already exist!")
-			return False
+	def move(self, dirc):
+		## change car_coord to the next coordinate.
+		new_coord, new_dirc = self.get_next(dirc)
+		
+		if new_coord not in NodeList:
+			self.NodeList[new_coord] = Node(new_coord, new_dirc, self.idx_count)
+			self.idx_count += 1
+		## TODO: link two nodes in csv
 
-		self.NodeList[new_coord] = Node(new_coord, new_dirc)
 		self.car_coord = new_coord
 		return True
 
@@ -84,9 +94,19 @@ class Graph():
 	def get_nextDir(self):
 		node = self.NodeList[self.coord]
 		if node.all_check():
-			return node.get_dirc()
-		
-		for dirc in Direction:
-			if !node.is_explored(dirc):
-				node.explored(dirc)
-				return dirc
+			dirc = node.get_dirc()
+			new_coord, new_dirc = self.get_next(dirc)
+			self.NodeList[new_coord].explore(new_dirc)
+		else:
+			for d in Direction:
+				if !node.is_explored(dirc):
+					dirc = d
+					break
+		self.change_dir(dirc)
+		return dirc
+
+	def noline(self, dirc):
+		self.NodeList[self.car_coord].explore(dirc)
+
+	def end_explore(self):
+		return self.NodeList[(0,0)].all_check()
