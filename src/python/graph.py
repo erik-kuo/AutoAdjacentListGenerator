@@ -7,7 +7,7 @@ class Node():
 	## explore 	: a dictionary,	represent which direction the car has explored.
 
 	def __init__(self, coord = None, dirc = "PX"):
-		if last_coord == None:
+		if coord == None:
 			self.init_start()
 		else:
 			self.coord = coord
@@ -17,17 +17,17 @@ class Node():
 	def init_start(self):
 		self.coord = (0, 0)
 		self.dirc = None
-		self.explore = {"PX": False, "PY": False, "NX": False, "NY": False}
+		self.explored = {"PX": False, "PY": False, "NX": False, "NY": False}
 
 	def init_explore(self):
-		self.explore = {"PX": False, "PY": False, "NX": False, "NY": False}
-		self.explore[self.dirc] = True
+		self.explored = {"PX": False, "PY": False, "NX": False, "NY": False}
+		self.explored[self.dirc] = True
 
 	def explore(self, dirc):
-		self.explore[dirc] = True
+		self.explored[dirc] = True
 
 	def is_explored(self, dirc):
-		return self.explore[dirc]
+		return self.explored[dirc]
 
 	def all_check(self):
 		return all(self.explore)
@@ -82,11 +82,11 @@ class Graph():
 		self.car_dir = dirc
 
 	def get_nextDir(self):
-		node = self.NodeList[self.coord]
+		node = self.NodeList[self.car_coord]
 		if node.all_check():
 			return node.get_dirc()
 		
 		for dirc in Direction:
-			if !node.is_explored(dirc):
-				node.explored(dirc)
+			if not node.is_explored(dirc):
+				node.explore(dirc)
 				return dirc
