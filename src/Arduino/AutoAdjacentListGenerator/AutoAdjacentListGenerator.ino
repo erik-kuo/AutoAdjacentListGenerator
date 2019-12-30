@@ -35,7 +35,7 @@ void SetState();
 // initalize parameter
 int r2=0,r1=0,m=0,l1=0,l2=0;
 int _Tp=80;
-double _rl_ratio = 1.33; // to match the motor on straight line
+double _rl_ratio = 1.28; // to match the motor on straight line
 
 void setup()
 {
@@ -76,7 +76,7 @@ enum Direction {
    NY,
 };
 
-Direction _dir = PY;
+Direction _dir = PX;
 
 // BT command
 BT_CMD _cmd=NOTHING;
@@ -97,16 +97,16 @@ void SetState() {
   _cmd=ask_BT();
   // TODO
   if(_state==HAULT_STATE){
-      if(_cmd==5)
+      if(_cmd==SEARCH)
         _state= SEARCH_STATE;
-      else if(_cmd == 6)
+      else if(_cmd == ADJUSTMENT)
         _state= COMPASS_STATE;
       else _state = _state;
   }
   else if(_state==SEARCH_STATE){
-      if(_cmd==4)
+      if(_cmd==HAULT)
         _state=HAULT_STATE;
-      if(_cmd==6)
+      if(_cmd==ADJUSTMENT)
         _state=COMPASS_STATE;
       else _state=_state;
   }
@@ -137,10 +137,19 @@ void Search_Mode(){
    // 進入node
    if((r1 == 1 && l1 == 1) || !HaveLine)// 5 black or no line TODO
    {
-      // 5 black 校正成與方格切齊
-      fiveBlack_adjest();
+      MotorWriting(0,0);
       // 知道要往哪個方向
-      _cmd = ask_BT();
+      do
+      {
+          _cmd = ask_BT();
+      }while(_cmd == NOTHING);
+      
+      if(HaveLine)
+      {
+          // 從tracking進node時做 5 black 校正成與方格切齊
+          fiveBlack_adjest();
+      }
+      
       switch(_dir)
       {
           // 車頭向+X
@@ -163,6 +172,8 @@ void Search_Mode(){
                       right_turn();
                       _dir = NY;
                       break;
+                  default:
+                      MotorWriting(0,0);
               }
               break;
           // 車頭向+Y
@@ -185,6 +196,8 @@ void Search_Mode(){
                       U_turn();
                       _dir = NY;
                       break;
+                  default:
+                      MotorWriting(0,0);
               }
               break;
           // 車頭向-X
@@ -207,6 +220,8 @@ void Search_Mode(){
                       left_turn();
                       _dir = NY;
                       break;
+                  default:
+                      MotorWriting(0,0);
               }
               break;
           // 車頭向-Y
@@ -229,6 +244,8 @@ void Search_Mode(){
                       forward();
                       _dir = NY;
                       break;
+                  default:
+                      MotorWriting(0,0);
               }
               break;
       }// switch(_dir)

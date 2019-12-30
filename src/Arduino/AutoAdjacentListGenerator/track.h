@@ -68,7 +68,7 @@ void tracking(int r2,int r1,int m,int l1,int l2){    //main velocity
   double _integral=0 ;  */ 
     // TODO
     double _w1=10;
-    double _w2=_w2/2.0;
+    double _w2=_w1/2.0;
     double _Kp=9;
     double error=l1*_w1+l2*_w2+r2*(-_w2)+r1*(-_w1);
     if ((r1+r2+l1+l2)>0) error/=(r1+r2+l1+l2);

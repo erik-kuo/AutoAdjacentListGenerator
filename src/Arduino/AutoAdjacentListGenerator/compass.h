@@ -2,10 +2,13 @@
 #include <math.h> // for arccos
 
 int16_t x_max = -1000, x_min = +1000, z_max = -1000, z_min = +1000;
+int16_t sample_time = 1; // to get average phi then return phi
 
 // get max, min to get offset
 void get_maxmin(){
-  int cnt = 2200;
+  int cnt = 3300;
+  MotorWriting(80,-80);
+  delay(100);
   mpu.read_mag();
   while(cnt > 0)
   {
@@ -18,7 +21,7 @@ void get_maxmin(){
         z_max = mpu.mz;
       if(z_min > mpu.mz)
         z_min = mpu.mz;
-      MotorWriting(+80,-80);
+      MotorWriting(+60,-60);
       cnt--;
   }
   MotorWriting(0,0);
@@ -29,16 +32,24 @@ float get_phi(){
   mpu.read_mag();
   
   // use x to evalute phi
-  float x, phi_x, x_offset;
+  float x, x_offset, phi_x = 0;
   x_offset = (float)(x_max + x_min)/2;
-  x = max(min(mpu.mx, x_max), x_min) - x_offset;
-  phi_x = acos(x/(x_max-x_offset))*180/PI;
+  for(int16_t i = 0; i < sample_time; ++i)
+  {
+      x = max(min(mpu.mx, x_max), x_min) - x_offset;
+      phi_x += acos(x/(x_max-x_offset))*180/PI;
+  }
+  phi_x /= sample_time;
 
   // use z to evalute phi
-  float z, phi_z, z_offset;
+  float z, z_offset, phi_z = 0;
   z_offset = (float)(z_max + z_min)/2;
-  z = max(min(mpu.mz, z_max), z_min) - z_offset;
-  phi_z = acos(z/(z_max-z_offset))*180/PI;
+  for(int16_t i = 0; i < sample_time; ++i)
+  {
+      z = max(min(mpu.mz, z_max), z_min) - z_offset;
+      phi_z += acos(z/(z_max-z_offset))*180/PI;
+  }
+  phi_z /= sample_time;
 
   // shift phi_z to match phi_x
   if(mpu.mz < (z_max + z_min)/2){ phi_x = 360 - phi_x; } // make phi : 0 ~ 360

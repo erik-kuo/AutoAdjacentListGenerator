@@ -119,7 +119,7 @@ class Graph():
     def out_file(self):
         DF = self.Adj.rename(columns={"PX": "East", "PY": "North", "NX": "West", "NY": "South"})
         DF.index.name = "index"
-        DF.to_csv("adj_list.csv")
+        DF.to_csv("../../adj_list.csv")
     
     def print_graph(self):
         print("Car pos: {}:{}, Car dir: {}".format(self.NodeList[self.car_coord].get_idx(), self.car_coord, self.car_dir))

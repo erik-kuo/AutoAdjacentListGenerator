@@ -20,6 +20,8 @@ class interface:
 				self.ser.disconnect()
 				quit()
 			port = input("PC bluetooth port name: ")
+		print('Bluetooth connected!')
+		print('')
 	
 	# sending change state cmd    
 	def Arduino_Search(self):
@@ -28,7 +30,8 @@ class interface:
 
 	def Arduino_Adjust_Compass(self):
 		input("Press enter to start COMPASS().")
-		self.ser.write('A')    
+		self.ser.write('A')
+		print('Auto change to HAULT() when finished')
 
 	def Arduino_Hault(self):
 		input("Press enter to start HAULT().")
@@ -36,21 +39,30 @@ class interface:
 
 	# get msg from Arduino::checkLine()
 	def get_Arduino_msg(self):
-		return self.ser.readString()
-
+		while True:
+			if self.ser.waiting():
+				msg = self.ser.readString()
+				msg = msg[:-1]
+				print('Get msg: ', msg, 'from Arduino.')
+				return msg
+		
 	# sending dirction 
 	def send_dir(self,dirc):
 		#PY
 		if(dirc=="PY"):
+			input("Press enter to send PY.")
 			self.ser.write('n')
 		#PX
 		elif(dirc=="PX"):
+			input("Press enter to send PX.")
 			self.ser.write('e')
 		#NX
 		elif(dirc=="NX"):
+			input("Press enter to send NX.")
 			self.ser.write('w')
 		#NY
 		elif(dirc=="NY"):
+			input("Press enter to send NY.")
 			self.ser.write('s')
 		#error
 		else:
