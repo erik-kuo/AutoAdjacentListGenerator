@@ -1,3 +1,12 @@
+/***************************************************************************/
+// File			[node.h]
+// Author		[Erik Kuo, Joshua Lin]
+// Synopsis		[Code used when encounter a node]
+// Functions    [fiveBlack_adjest, Backward_fiveBlack_adjest, checkline, 
+//               forward, right_ture, left_ture, U_turn]
+// Modify		[2020/01/02 Joshua Lin]
+/***************************************************************************/
+
 #include <SoftwareSerial.h>
 #include <Wire.h>
 
@@ -28,6 +37,7 @@ void fiveBlack_adjest() // 校正成與方格切齊
     delay(100);
 }
 
+// 最後沒有用到
 void Backward_fiveBlack_adjest() // 校正成與方格切齊
 {
     MotorWriting(0,0);
@@ -45,6 +55,7 @@ void Backward_fiveBlack_adjest() // 校正成與方格切齊
     delay(100);
 }
 
+// Check if theres a line in front of the car.
 bool checkline()
 {
     // read sensor value

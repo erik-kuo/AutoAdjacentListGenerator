@@ -1,3 +1,10 @@
+#############################################################################
+## File			[aalg.py]
+## Author		[Erik Kuo]
+## Synopsis		[Main python code for AALG]
+## Modify		[2019/12/30 Erik Kuo]
+#############################################################################
+
 import BTinterface
 import graph
 

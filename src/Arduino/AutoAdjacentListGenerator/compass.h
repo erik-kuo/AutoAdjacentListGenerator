@@ -1,3 +1,11 @@
+/***************************************************************************/
+// File			  [compass.h]
+// Author		  [Joshua Lin]
+// Synopsis		[Arduino code for compass]
+// Functions  [get_maxmin, get_phi]
+// Modify		  [2020/01/02 Joshua Lin]
+/***************************************************************************/
+
 #include <MPU9255.h> //include MPU9255 library
 #include <math.h> // for arccos
 
@@ -27,7 +35,7 @@ void get_maxmin(){
   MotorWriting(0,0);
 }
 
-// return phi for turning
+// return current phi for turning
 float get_phi(){
   mpu.read_mag();
   

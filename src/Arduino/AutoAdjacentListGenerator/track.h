@@ -1,3 +1,11 @@
+/***************************************************************************/
+// File			[track.h]
+// Author		[Erik Kuo]
+// Synopsis		[Code used for tracking]
+// Functions    [MotorInverter, MotorWriting, tracking]
+// Modify		[2020/01/02 Joshua Lin]
+/***************************************************************************/
+
 #include <SoftwareSerial.h>
 #include <Wire.h>
 #define DEBUG
@@ -5,9 +13,8 @@
 int extern _Tp;
 double extern  _rl_ratio; // to match the motor on straight line
 
-
+// Handle negative motor_PWMR value.
 void MotorInverter(int motor, bool& dir) {
-    
     if(motor==MotorL_PWML){
         if(dir){
             digitalWrite(MotorL_I1,HIGH);
@@ -30,8 +37,8 @@ void MotorInverter(int motor, bool& dir) {
     }
 }
 
+// Write the voltage to motor.
 void MotorWriting(double vR, double vL) {
-
     vR = vR * _rl_ratio;
     bool R_dir,L_dir;
     if(vR<0)
@@ -56,17 +63,8 @@ void MotorWriting(double vR, double vL) {
     
 }
 
-
-void tracking(int r2,int r1,int m,int l1,int l2){    //main velocity
-  /*  double _Tp ;                         // Velocity of Car
-  double _w2=2.0 ;                       // Weight Value for the Outer Sensor
-  double _w1 ;                   // Weight Value for the Inner Sensor
-  double _Kp=60 ;                       // _Kp Parameter
-  double _Kd=0.03 ;                        // _Kd Parameter
-  double _Ki=6.0 ;                         // _Ki Parameter
-  double _LastError ;  
-  double _integral=0 ;  */ 
-    // TODO
+// P control Tracking
+void tracking(int r2,int r1,int m,int l1,int l2){
     double _w1=10;
     double _w2=_w1/2.0;
     double _Kp=9;
@@ -74,16 +72,4 @@ void tracking(int r2,int r1,int m,int l1,int l2){    //main velocity
     if ((r1+r2+l1+l2)>0) error/=(r1+r2+l1+l2);
     error*=_Kp;
     MotorWriting((_Tp+error), _Tp-error);
-    /*Serial.print(_Tp-error);
-    Serial.println(_Tp+error);*/
-    
-    /*double error=_w2*l2+_w1*l1-_w2*r2-_w1*r1;           
-    if((l1+l2==2)||(l1+m==2)||(r1+m==2)||(r1+r2==2))error=error/2; 
-    double revise = 4/5;                                           //need to test
-    _integral = revise*_integral + error;      
-    if(error>=1.5) _Tp=0;      
-    double power=_Kp*error + _Ki*_integral;
-    double vR=_Tp+power;
-    double vL=_Tp-power; 
-    MotorWriting((int)vR, (int)vL);   */   
 }

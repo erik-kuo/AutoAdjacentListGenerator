@@ -1,11 +1,16 @@
+#############################################################################
+## File			[graph.py]
+## Author		[Joshua Lin]
+## Synopsis		[Classes Node and Graph for AALG]
+## Modify		[2020/01/02 Joshua Lin]
+#############################################################################
 import pandas as pd
 Direction = ["PX", "PY", "NX", "NY"]
-
 
 class Node():
     # Data member for Node:
     # coord 	: a tuple, 		represent the coordinate of the node.
-    # dirc 	: a string, 	represent which direction the car entered the node. (dirc == None for starting node.)
+    # dirc 	    : a string, 	represent which direction the car entered the node. (dirc == None for starting node.)
     # explore 	: a dictionary,	represent which direction the car has explored.
 
     def __init__(self, coord=None, dirc="PX", idx=0):
@@ -27,12 +32,16 @@ class Node():
         self.explored[self.dirc] = True
 
     def explore(self, dirc):
+        # Set Node's dirc to explored.
+        # A direction of a node is explored when all its successor is explored.
         self.explored[dirc] = True
 
     def is_explored(self, dirc):
+        # Return True if a direction of a node is explored.
         return self.explored[dirc]
 
     def all_check(self):
+        # Retrun if all the direction of a node is explored.
         return all(self.explored.values())
 
     def is_start(self):
@@ -96,6 +105,7 @@ class Graph():
         self.car_dir = dirc
 
     def get_nextDir(self):
+        # get the next direction the car is going to explore.
         node = self.NodeList[self.car_coord]
         dirc = ''
         if node.all_check():
@@ -111,23 +121,28 @@ class Graph():
         return dirc
 
     def noline(self, dirc):
+        # Marked the direction of car_coord as noline. 
         self.NodeList[self.car_coord].explore(dirc)
 
     def end_explore(self):
+        # Return True if explore end.
         return self.NodeList[(0, 0)].all_check()
 
     def out_file(self):
+        # Output adjacent list file. (filename: adj_list.csv)
         DF = self.Adj.rename(columns={"PX": "East", "PY": "North", "NX": "West", "NY": "South"})
         DF.index.name = "index"
         DF.to_csv("../../adj_list.csv")
     
     def print_graph(self):
+        # Print the current graph on the terminal.
         print("Car pos: {}:{}, Car dir: {}".format(self.NodeList[self.car_coord].get_idx(), self.car_coord, self.car_dir))
         print(self.Adj)
         print()
 
 
 if __name__ == "__main__":
+    # For debbuging: Explore a imaginary graph by typing if the given direction has a line.
     graph = Graph()
     dirc = 'PX'
     

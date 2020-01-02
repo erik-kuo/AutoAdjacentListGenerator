@@ -1,3 +1,10 @@
+/***************************************************************************/
+// File			[AutoAdjacentListGenerator.ino]
+// Author		[Erik Kuo]
+// Synopsis		[Code used when encounter a node]
+// Modify		[2020/01/02 Joshua Lin]
+/***************************************************************************/
+
 #include<SoftwareSerial.h> // for BlueTooth
 #include <MPU9255.h> //include MPU9255 library
 //BlueTooth
